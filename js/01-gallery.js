@@ -1,55 +1,49 @@
 import { galleryItems } from "./gallery-items.js";
 // Change code below this line
 
-function renderGallery(galleryItems) {
-  const galleryElement = document.querySelector(".gallery");
+const galleryList = document.querySelector(".gallery");
 
-  galleryItems.forEach((galleryItem) => {
-    const galleryItemElement = createGalleryItem(galleryItem);
-    galleryElement.appendChild(galleryItemElement);
-  });
-}
+const createGallery = (el) => {
+  return el
+    .map(({ preview, original, description }) => {
+      return `
+    <li class="gallery__item">
+    <a class="gallery__link" href="${original}">
+    <img 
+    class="gallery__image"
+    src="${preview}"
+    data-source="${original}"
+    alt="${description}"
+    />
+    </a>
+    </li>`;
+    })
+    .join("");
+};
 
-renderGallery(galleryItems);
+const photosMarkup = createGallery(galleryItems);
+galleryList.insertAdjacentHTML("beforeend", photosMarkup);
 
-function getLargeImageUrl(galleryItemElement) {
-  return galleryItemElement.querySelector(".gallery__image").dataset.source;
-}
+const handleGalleryClick = (event) => {
+  event.preventDefault();
 
-function openModalWindow(galleryItemElement) {
-  const modalWindow = basicLightbox.create(
-    `<img src="${getLargeImageUrl(
-      galleryItemElement
-    )}" alt="Image description" />`
-  );
-
-  modalWindow.show();
-}
-
-document.querySelector(".gallery").addEventListener("click", (event) => {
-  const targetElement = event.target;
-
-  if (targetElement.classList.contains("gallery__image")) {
-    openModalWindow(targetElement.closest(".gallery__item"));
+  if (event.target.nodeName !== "IMG") {
+    return;
   }
-});
 
-function replaceImageSrcInModalWindow(modalWindow, largeImageUrl) {
-  const imageElement = modalWindow.element().querySelector("img");
-  imageElement.src = largeImageUrl;
-}
+  const urlOriginal = event.target.dataset.source;
 
-function openModalWindowAndReplaceImageSrc(galleryItemElement) {
-  const modalWindow = basicLightbox.create(
-    `<img src="${getLargeImageUrl(
-      galleryItemElement
-    )}" alt="Image description" />`
-  );
+  const instance = basicLightbox.create(`<img scr="${urlOriginal}">`);
+  instance.show();
 
-  replaceImageSrcInModalWindow(
-    modalWindow,
-    getLargeImageUrl(galleryItemElement)
-  );
+  const handleOnEscKey = (event) => {
+    if (event.key === "Escape") {
+      instance.close();
+      window.removeEventListener("keydown", handleOnEscKey);
+    }
+  };
 
-  modalWindow.show();
-}
+  window.addEventListener("keydown", handleOnEscKey);
+};
+
+galleryList.addEventListener("click", handleGalleryClick);
