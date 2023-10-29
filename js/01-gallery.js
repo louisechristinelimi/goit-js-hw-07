@@ -1,26 +1,6 @@
 import { galleryItems } from "./gallery-items.js";
 // Change code below this line
 
-function createGalleryItem(galleryItem) {
-  const galleryItemElement = document.createElement("li");
-  galleryItemElement.classList.add("gallery__item");
-
-  const galleryLinkElement = document.createElement("a");
-  galleryLinkElement.classList.add("gallery__link");
-  galleryLinkElement.href = "#";
-
-  const galleryImageElement = document.createElement("img");
-  galleryImageElement.classList.add("gallery__image");
-  galleryImageElement.src = galleryItem.smallImage;
-  galleryImageElement.dataset.source = galleryItem.largeImage;
-  galleryImageElement.alt = galleryItem.alt;
-
-  galleryLinkElement.appendChild(galleryImageElement);
-  galleryItemElement.appendChild(galleryLinkElement);
-
-  return galleryItemElement;
-}
-
 function renderGallery(galleryItems) {
   const galleryElement = document.querySelector(".gallery");
 
