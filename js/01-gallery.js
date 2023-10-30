@@ -33,7 +33,7 @@ const handleGalleryClick = (event) => {
 
   const urlOriginal = event.target.dataset.source;
 
-  const instance = basicLightbox.create(`<img scr="${urlOriginal}">`);
+  const instance = basicLightbox.create(`<img src="${urlOriginal}">`);
   instance.show();
 
   const handleOnEscKey = (event) => {
